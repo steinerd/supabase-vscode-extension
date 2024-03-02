@@ -23,7 +23,7 @@
   "activationEvents": [
     "workspaceContains:**/.env"
   ],
-  "main": "./out/index.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -65,12 +65,15 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "yarn run esbuild-base --minify",    
+    "esbuild-base": "esbuild ./src/index.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "yarn run esbuild-base --sourcemap",
+    "test-compile": "tsc -p ./",
+    "test": "node ./out/test/runTest.js",
+    "esbuild-watch": "yarn run esbuild-base  --sourcemap --watch",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "package": "npx vsce package --yarn -o out"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
@@ -80,13 +83,15 @@
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "@vscode/test-electron": "^2.1.5",
+    "esbuild": "^0.20.1",
     "eslint": "^8.24.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
+    "ts-loader": "^9.5.1",
     "typescript": "^4.8.4",
     "yarn-audit-fix": "^10.0.7"
   },
-  "dependencies": {    
+  "dependencies": {
     "js-toml": "^1.0.0"
   }
 }
