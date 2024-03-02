@@ -1,12 +1,16 @@
 import * as vscode from "vscode";
 
 const defineQuickPath = (command: string, path: string) => {
-  return vscode.commands.registerCommand(`supabase-vscode.${command}`, () => {
-    if (!supabaseRef) {
-      return vscode.window.showErrorMessage("[Error] Supabase: Couldn't find Supabase's Ref from your .env file");
+  return vscode.commands.registerCommand(`supabase-vscode.${command}`, () => {    
+    if (global.supabaseHost.indexOf("supabase.co") > -1) {
+      if (!supabaseRef) {
+        return vscode.window.showErrorMessage("[Error] Supabase: Couldn't find Supabase's Ref from your .env file");
+      }
+      vscode.env.openExternal(vscode.Uri.parse(`https://app.supabase.com/project/${supabaseRef}${path}`));
+    } else {
+      vscode.env.openExternal(vscode.Uri.parse(`${global.supabaseHost}/project/default/${path}`));
     }
 
-    vscode.env.openExternal(vscode.Uri.parse(`https://app.supabase.com/project/${supabaseRef}${path}`));
   });
 };
 
