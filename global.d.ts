@@ -3,3 +3,4 @@ declare global {
   var supabaseHost: string;
 }
 export {};
+

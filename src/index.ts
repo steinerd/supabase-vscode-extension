@@ -13,9 +13,10 @@ export async function activate(context: vscode.ExtensionContext) {
     const envList = lines.map((line) => line.matchAll(envParseRegex).next().value.groups);
 
     if (envList.length === 0 || !envList) { return; }
-
+    console.log(envList);
     const supabaseUrl = envList.find((i) => i.key === "SUPABASE_URL")?.value ?? "https://supabase.co";
 
+    console.log(supabaseUrl);
     global.supabaseHost = supabaseUrl;
 
     if (global.supabaseHost.indexOf("supabase.co") === -1) {
